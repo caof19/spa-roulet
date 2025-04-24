@@ -159,12 +159,19 @@
 	<script>
         const image = document.getElementById('rotating-image');
         const spinButton = document.getElementById('spin-button');
+        const giftSpin = document.querySelector('.roulet__wrap img');
         
         spinButton.addEventListener('click', function() {
-            // Сначала добавляем класс для быстрого вращения по часовой стрелке
+            const randomNumber = Math.floor(Math.random() * 100) + 1;
             image.classList.remove('slow__rotation');
             image.classList.add('fast-clockwise');
-            
+            const activeGift = chance.find(item => {
+            	return randomNumber >= item.min && randomNumber <= item.max
+            })
+
+            console.log(randomNumber);
+
+            giftSpin.setAttribute('src', activeGift.img)
             // Через 500 мс (после завершения первой анимации) удаляем первый класс
             // и добавляем класс для вращения против часовой стрелки
             setTimeout(() => {
@@ -175,6 +182,50 @@
                 document.querySelector('.roulet__form').classList.add('roulet__default');
             }, 3000);
         });
+
+        let chance = [
+        	{
+        		img: './win2.png',
+        		min: 1,
+        		max: 10,
+        		name: 'Скидка 5%',
+        	},{
+        		img: './win3.png',
+        		min: 11,
+        		max: 46,
+        		name: 'Скидка 7%',
+        	},{
+        		img: './win4.png',
+        		min: 47,
+        		max: 67,
+        		name: 'Скидка 10%',
+        	},{
+        		img: './win5.png',
+        		min: 68,
+        		max: 73,
+        		name: 'Парафин ног',
+        	},{
+        		img: './win6.png',
+        		min: 74,
+        		max: 79,
+        		name: 'Парафин рук',
+        	},{
+        		img: './win8.png',
+        		min: 80,
+        		max: 85,
+        		name: 'Массаж лица',
+        	},{
+        		img: './win9.png',
+        		min: 86,
+        		max: 90,
+        		name: 'Уход за лицом',
+        	},{
+        		img: './win1.png',
+        		min: 91,
+        		max: 100,
+        		name: 'Серитификат на 500',
+        	}
+        ];
     </script>
 
 </body>

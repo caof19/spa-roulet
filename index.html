@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		img {
+			max-width: 100%;
+		}
+		.roulet * {
+			box-sizing: border-box;
+		}
+		.roulet__form,
+		.roulet__col {
+			position: relative;
+			width: 500px;
+			height: 500px;
+			transition: all 2s;
+		}
+		body {
+			display: flex;
+			height: 98vh;
+			width: 98vw;
+			justify-content: center;
+			align-items: center;
+		}
+		.roulet__wrap {
+			position: relative;
+		}
+		.roulet__empty {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			transition: opacity 1s;
+			border-radius: 50%;
+			overflow: hidden;
+		}
+		.slow__rotation {
+			animation: slow-rotation 10s linear infinite;
+		}
+		@keyframes slow-rotation {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .fast-clockwise {
+            animation: fast-clockwise 3s cubic-bezier(.52,-0.6,.12,.98);
+        }
+        
+        @keyframes fast-clockwise {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .fade {
+        	opacity: 0;
+        }
+        .btn {
+        	background-color: rgb(33, 110, 52);
+        	color: #fff;
+        	display: block;
+        	margin-left: auto;
+        	margin-right: auto;
+        	width: 300px;
+        	padding: 18px;
+        	border-radius: 4px;
+        	border: none;
+        	margin-top: 16px;
+        	cursor: pointer;
+        }
+        .roulet {
+        	display: flex;
+        	font-family: sans-serif;
+        }
+        .roulet__title {
+        	text-align: center;
+        	font-size: 32px;
+        }
+        .roulet__desc {
+        	font-size: 18px;
+        	margin-top: 16px;
+        	text-align: center;
+        	margin-bottom: 32px;
+        }
+        .input__wrap {
+        	display: block;
+        	width: 100%;
+        	margin-top: 8px;
+        }
+        .input__wrap input {
+        	border: 1px solid #ddd;
+        	padding: 10px;
+        	border-radius: 4px;
+        	width: 300px;
+        	display: block;
+        	margin-left: auto;
+        	margin-right: auto;
+        	font-size: 16px;
+        }
+        .roulet__form {
+        	display: flex;
+        	align-items: center;
+        	flex-direction: column;
+        	justify-content: center;
+        }
+        .roulet__col {
+        	position: relative;
+        	left: 250px;
+        	z-index: 2;
+        	background-color: #fff;
+        }
+        .roulet__form {
+        	left: -250px;
+        	z-index: 1;
+        }
+        .roulet__default {
+        	left: 0;
+        }
+	</style>	
+</head>
+<body>
+	<div class="roulet">
+		<div class="roulet__col">
+			<div class="roulet__wrap">
+				<img src="./win1.png" alt="">
+			</div>
+			<div class="roulet__empty slow__rotation" id="rotating-image">
+				<img src="./empty.png" alt="">
+			</div>
+			<button id="spin-button" class="btn">Крутить колесо</button>
+		</div>
+		<div class="roulet__form">
+			<div class="roulet__title">ВЫИГРАЙТЕ ОДИН <br> ИЗ ПРИЗОВ</div>
+			<div class="roulet__desc">Введите свои контактные данные, вращайте <br> колесо и получите подарок</div>
+			<form action="" class="form">
+				<label for="" class="input__wrap">
+					<input type="text" placeholder="Ваше имя">
+				</label>
+				<label for="" class="input__wrap">
+					<input type="text" placeholder="+7 (999) 999-99-99">
+				</label>
+				<label for="" class="input__wrap">
+					<input type="text" placeholder="Ваш E-mail">
+				</label>
+				<button class="btn">Получить подарок</button>
+			</form>
+		</div>
+	</div>
+	<script>
+        const image = document.getElementById('rotating-image');
+        const spinButton = document.getElementById('spin-button');
+        
+        spinButton.addEventListener('click', function() {
+            // Сначала добавляем класс для быстрого вращения по часовой стрелке
+            image.classList.remove('slow__rotation');
+            image.classList.add('fast-clockwise');
+            
+            // Через 500 мс (после завершения первой анимации) удаляем первый класс
+            // и добавляем класс для вращения против часовой стрелки
+            setTimeout(() => {
+                image.classList.remove('fast-clockwise');
+                image.classList.add('fade');
+
+                document.querySelector('.roulet__col').classList.add('roulet__default');
+                document.querySelector('.roulet__form').classList.add('roulet__default');
+            }, 3000);
+        });
+    </script>
+
+</body>
+</html>

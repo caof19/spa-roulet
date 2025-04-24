@@ -20,8 +20,6 @@
 		}
 		body {
 			display: flex;
-			height: 98vh;
-			width: 98vw;
 			justify-content: center;
 			align-items: center;
 		}
@@ -81,6 +79,12 @@
         .roulet {
         	display: flex;
         	font-family: sans-serif;
+        	gap: 10px;
+        }
+        .roulet__wrap,
+        .roulet__empty {
+        	width: 500px;
+        	height: 500px;
         }
         .roulet__title {
         	text-align: center;
@@ -115,29 +119,87 @@
         }
         .roulet__col {
         	position: relative;
-        	left: 250px;
+        	left: 255px;
         	z-index: 2;
         	background-color: #fff;
+        	display: flex;
+        	align-items: center;
         }
         .roulet__form {
-        	left: -250px;
+        	left: -255px;
         	z-index: 1;
+        }
+        .roulet__outer {
+        	position: relative;
+        	display: flex;
+        	flex-direction: column;
+        	justify-content: center;
+        	align-items: center;
+        }
+        
+        @media screen and (max-width: 1100px) {
+        	.roulet__form,
+			.roulet__col {
+				width: 300px;
+			}
+			.roulet__col {
+				left: 155px;
+			}
+			.roulet__form {
+	        	left: -155px;
+	        }
+	        .roulet__wrap,
+	        .roulet__empty {
+	        	width: 300px;
+	        	height: 300px;
+	        }
+        }
+        @media screen and (max-width: 768px) {
+        	.roulet {
+        		flex-wrap: wrap;
+        		height: 500px;
+        		transition: all 2s;
+        	}
+        	.roulet__form,
+        	.roulet__col {
+        		width: 100%;
+        	}
+        	.roulet__col {
+        		justify-content: center;
+				left: 0;
+				height: 430px;
+			}
+			.roulet__form {
+	        	left: 0;
+	        	height: auto;
+	        	top: -430px;
+	        }
+	        .roulet--end {
+	        	height: 670px;
+	        }
         }
         .roulet__default {
         	left: 0;
+        	top: 0;
+        }
+        .hide {
+        	opacity: 0;
+        	visibility: hidden;
         }
 	</style>	
 </head>
 <body>
 	<div class="roulet">
 		<div class="roulet__col">
-			<div class="roulet__wrap">
-				<img src="./win1.png" alt="">
+			<div class="roulet__outer">
+				<div class="roulet__wrap">
+					<img src="./win1.png" alt="">
+				</div>
+				<div class="roulet__empty slow__rotation" id="rotating-image">
+					<img src="./empty.png" alt="">
+				</div>
+				<button id="spin-button" class="btn">Крутить колесо</button>
 			</div>
-			<div class="roulet__empty slow__rotation" id="rotating-image">
-				<img src="./empty.png" alt="">
-			</div>
-			<button id="spin-button" class="btn">Крутить колесо</button>
 		</div>
 		<div class="roulet__form">
 			<div class="roulet__title">ВЫИГРАЙТЕ ОДИН <br> ИЗ ПРИЗОВ</div>
@@ -165,11 +227,11 @@
             const randomNumber = Math.floor(Math.random() * 100) + 1;
             image.classList.remove('slow__rotation');
             image.classList.add('fast-clockwise');
+            spinButton.classList.add('hide');
             const activeGift = chance.find(item => {
             	return randomNumber >= item.min && randomNumber <= item.max
             })
 
-            console.log(randomNumber);
 
             giftSpin.setAttribute('src', activeGift.img)
             // Через 500 мс (после завершения первой анимации) удаляем первый класс
@@ -180,6 +242,7 @@
 
                 document.querySelector('.roulet__col').classList.add('roulet__default');
                 document.querySelector('.roulet__form').classList.add('roulet__default');
+                document.querySelector('.roulet').classList.add('roulet--end');
             }, 3000);
         });
 

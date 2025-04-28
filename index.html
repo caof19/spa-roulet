@@ -57,7 +57,7 @@
                 transform: rotate(0deg);
             }
             to {
-                transform: rotate(360deg);
+                transform: rotate(720deg);
             }
         }
         .fade {
@@ -136,6 +136,18 @@
         	justify-content: center;
         	align-items: center;
         }
+        .logo {
+        	position: absolute;
+        	z-index: 2;
+        	left: calc(50% - 32px);
+        	top: calc(50% - 64px);
+        	width: 64px;
+        	height: 64px;
+        	background-color: #fff;
+        	border-radius: 50%;
+        	border: 1px solid #0a0;
+        	animation: slow-rotation 15s linear infinite;
+        }
         
         @media screen and (max-width: 1100px) {
         	.roulet__form,
@@ -186,6 +198,18 @@
         	opacity: 0;
         	visibility: hidden;
         }
+        .triangle {
+		   display: inline-block;
+		      width: 0;
+		      height: 0;
+		      border-style: solid;
+		    border-width: 50px 86.6px 50px 0px;
+		    border-color: transparent #198A37 transparent transparent;
+		    position: absolute;
+		    right: -40px;
+		    top: calc(50% - 81px);
+		}
+
 	</style>	
 </head>
 <body>
@@ -198,6 +222,10 @@
 				<div class="roulet__empty slow__rotation" id="rotating-image">
 					<img src="./empty.png" alt="">
 				</div>
+				<div class="logo">
+					<img src="./logo.png" alt="">
+				</div>
+				<div class="triangle"></div>
 				<button id="spin-button" class="btn">Крутить колесо</button>
 			</div>
 		</div>
@@ -273,17 +301,17 @@
         		max: 79,
         		name: 'Парафин рук',
         	},{
-        		img: './win8.png',
+        		img: './win7.png',
         		min: 80,
         		max: 85,
         		name: 'Массаж лица',
         	},{
-        		img: './win9.png',
+        		img: './win8.png',
         		min: 86,
         		max: 90,
         		name: 'Уход за лицом',
         	},{
-        		img: './win1.png',
+        		img: './win9.png',
         		min: 91,
         		max: 100,
         		name: 'Серитификат на 500',

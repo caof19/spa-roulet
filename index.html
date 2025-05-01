@@ -86,6 +86,7 @@
         	width: 500px;
         	height: 500px;
         }
+        .roulet__success,
         .roulet__title {
         	text-align: center;
         	font-size: 32px;
@@ -206,7 +207,7 @@
 		    border-width: 50px 86.6px 50px 0px;
 		    border-color: transparent #198A37 transparent transparent;
 		    position: absolute;
-		    right: -40px;
+		    right: -50px;
 		    top: calc(50% - 81px);
 		}
 
@@ -218,8 +219,17 @@
 			}
 			
 		}
+		.show {
+			display: block;
+		}
+		.hide {
+			display: none;
+
+		}
+
 
 	</style>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/7.6.1/imask.min.js" integrity="sha512-+3RJc0aLDkj0plGNnrqlTwCCyMmDCV1fSYqXw4m+OczX09Pas5A/U+V3pFwrSyoC1svzDy40Q9RU/85yb/7D2A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
 	<div class="roulet">
@@ -235,97 +245,155 @@
 					<img src="./logo.png" alt="">
 				</div>
 				<div class="triangle"></div>
-				<button id="spin-button" class="btn">Крутить колесо</button>
+				<button id="spin-button" class="btn">Крути колесо и получи приз!</button>
 			</div>
 		</div>
 		<div class="roulet__form">
-			<div class="roulet__title">ВЫИГРАЙТЕ ОДИН <br> ИЗ ПРИЗОВ</div>
-			<div class="roulet__desc">Введите свои контактные данные, вращайте <br> колесо и получите подарок</div>
-			<form action="" class="form">
-				<label for="" class="input__wrap">
-					<input type="text" placeholder="Ваше имя">
-				</label>
-				<label for="" class="input__wrap">
-					<input type="text" placeholder="+7 (999) 999-99-99">
-				</label>
-				<label for="" class="input__wrap">
-					<input type="text" placeholder="Ваш E-mail">
-				</label>
-				<button class="btn">Получить подарок</button>
-			</form>
+			<div class="roulet__frm">
+				<div class="roulet__title">ВЫИГРАЙТЕ ОДИН <br> ИЗ ПРИЗОВ</div>
+				<div class="roulet__desc">Введите свои контактные данные, вращайте <br> колесо и получите подарок</div>
+				<form action="" class="form" id="myForm">
+					<label for="" class="input__wrap">
+						<input type="text" placeholder="Ваше имя" name="name">
+					</label>
+					<label for="" class="input__wrap">
+						<input type="text" placeholder="+7 (999) 999-99-99" id="phone-mask" name="phone">
+					</label>
+					<label for="" class="input__wrap">
+						<input type="text" placeholder="Ваш E-mail" name="email">
+					</label>
+					<input type="hidden" name="win">
+					<button class="btn">Получить подарок</button>
+				</form>
+			</div>
+			<div class="roulet__success hide">
+				Наш менеджер <br> свяжется с вами!
+			</div>
 		</div>
 	</div>
 	<script>
-        const image = document.getElementById('rotating-image');
-        const spinButton = document.getElementById('spin-button');
-        const giftSpin = document.querySelector('.roulet__wrap img');
-        
-        spinButton.addEventListener('click', function() {
-            const randomNumber = Math.floor(Math.random() * 100) + 1;
-            image.classList.remove('slow__rotation');
-            image.classList.add('fast-clockwise');
-            spinButton.classList.add('hide');
-            const activeGift = chance.find(item => {
-            	return randomNumber >= item.min && randomNumber <= item.max
-            })
+		document.addEventListener('DOMContentLoaded', function(){
 
+			IMask(
+			  document.getElementById('phone-mask'),
+			  {
+			    mask: '+{7}(000)000-00-00'
+			  }
+			)
 
-            giftSpin.setAttribute('src', activeGift.img)
-            // Через 500 мс (после завершения первой анимации) удаляем первый класс
-            // и добавляем класс для вращения против часовой стрелки
-            setTimeout(() => {
-                image.classList.remove('fast-clockwise');
-                image.classList.add('fade');
-
-                document.querySelector('.roulet__col').classList.add('roulet__default');
+			const active = localStorage.getItem('giftImg');
+			const image = document.getElementById('rotating-image');
+	        const spinButton = document.getElementById('spin-button');
+	        const giftSpin = document.querySelector('.roulet__wrap img');
+			
+			if(active) {
+				giftSpin.setAttribute('src', active)
+				image.classList.remove('fast-clockwise');
+				image.classList.remove('slow__rotation');
+				image.classList.add('fade');
+				spinButton.style.opacity = 0;
+				document.querySelector('.roulet__col').classList.add('roulet__default');
                 document.querySelector('.roulet__form').classList.add('roulet__default');
                 document.querySelector('.roulet').classList.add('roulet--end');
-            }, 3000);
-        });
+                document.querySelector('.roulet__frm').classList.add('hide');
+                document.querySelector('.roulet__success').classList.remove('hide');
+                return;
+			}
 
-        let chance = [
-        	{
-        		img: './win2.png',
-        		min: 1,
-        		max: 10,
-        		name: 'Скидка 5%',
-        	},{
-        		img: './win3.png',
-        		min: 11,
-        		max: 46,
-        		name: 'Скидка 7%',
-        	},{
-        		img: './win4.png',
-        		min: 47,
-        		max: 67,
-        		name: 'Скидка 10%',
-        	},{
-        		img: './win5.png',
-        		min: 68,
-        		max: 73,
-        		name: 'Парафин ног',
-        	},{
-        		img: './win6.png',
-        		min: 74,
-        		max: 79,
-        		name: 'Парафин рук',
-        	},{
-        		img: './win7.png',
-        		min: 80,
-        		max: 85,
-        		name: 'Массаж лица',
-        	},{
-        		img: './win8.png',
-        		min: 86,
-        		max: 90,
-        		name: 'Уход за лицом',
-        	},{
-        		img: './win9.png',
-        		min: 91,
-        		max: 100,
-        		name: 'Серитификат на 500',
-        	}
-        ];
+	        
+	        spinButton.addEventListener('click', function() {
+	            const randomNumber = Math.floor(Math.random() * 100) + 1;
+	            image.classList.remove('slow__rotation');
+	            image.classList.add('fast-clockwise');
+	            spinButton.style.opacity = 0;
+	            const activeGift = chance.find(item => {
+	            	return randomNumber >= item.min && randomNumber <= item.max
+	            })
+
+            	document.querySelector('[name="win"]').value = activeGift.name;
+
+	            giftSpin.setAttribute('src', activeGift.img)
+	            localStorage.setItem('giftImg', activeGift.img)
+
+	            setTimeout(() => {
+	                image.classList.remove('fast-clockwise');
+	                image.classList.add('fade');
+
+	                document.querySelector('.roulet__col').classList.add('roulet__default');
+	                document.querySelector('.roulet__form').classList.add('roulet__default');
+	                document.querySelector('.roulet').classList.add('roulet--end');
+	            }, 3000);
+	        });
+
+	        let chance = [
+	        	{
+	        		img: './win2.png',
+	        		min: 0,
+	        		max: 9,
+	        		name: 'Скидка 5%',
+	        	},{
+	        		img: './win3.png',
+	        		min: 10,
+	        		max: 44,
+	        		name: 'Скидка 7%',
+	        	},{
+	        		img: './win4.png',
+	        		min: 45,
+	        		max: 70,
+	        		name: 'Скидка 300₽',
+	        	},{
+	        		img: './win5.png',
+	        		min: 71,
+	        		max: 76,
+	        		name: 'Стоунтерапия',
+	        	},{
+	        		img: './win6.png',
+	        		min: 77,
+	        		max: 82,
+	        		name: 'Парафин рук',
+	        	},{
+	        		img: './win7.png',
+	        		min: 83,
+	        		max: 87,
+	        		name: 'Массаж лица',
+	        	},{
+	        		img: './win8.png',
+	        		min: 88,
+	        		max: 90,
+	        		name: 'Уход за лицом',
+	        	},{
+	        		img: './win9.png',
+	        		min: 91,
+	        		max: 100,
+	        		name: 'Скидка 500₽',
+	        	}
+	        ];
+
+	        document.getElementById('myForm').addEventListener('submit', function(e) {
+	            e.preventDefault(); 
+	            
+	            const formData = new FormData(this);
+	            
+	            
+	            const data = {};
+	            formData.forEach((value, key) => {
+	                data[key] = value;
+	            });
+	            
+	            document.cookie = "beget=begetok; path=/";
+	            fetch('https://sam.panfolio.ru/roulet.php', {
+	                method: 'POST',
+	                // headers: {
+	                //     'Content-Type': 'application/json', // Указываем, что отправляем JSON
+	                // },
+	                body:formData // Преобразуем объект в JSON-строку
+	            })
+	            .then(response => {
+	              	document.querySelector('.roulet__frm').classList.add('hide');
+                	document.querySelector('.roulet__success').classList.remove('hide');	                  
+	            })
+	        })
+	    })
     </script>
 
 </body>
